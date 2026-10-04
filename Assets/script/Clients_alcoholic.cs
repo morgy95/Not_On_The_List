@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Clients_alcoholic : Clients
 {
-    [SerializeField] private Timer timer;
+     private Timer timer;
     [SerializeField] private Transform cible;
 
     [Header("Mouvement normal")]
@@ -34,11 +34,14 @@ public class Clients_alcoholic : Clients
     void Start()
     {
         centre = rb.position;
+        timer = new Timer();
         ChoisirDestination(rayonNormal);
     }
 
     void Update()
     {
+        if (dansLeBar)
+            timer.MettreAJour(Time.deltaTime);
         if (dansLeBar && status == "normal" && timer.Minute >= 4)
             status = "pissed";
     }
@@ -50,18 +53,19 @@ public class Clients_alcoholic : Clients
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("bar"))
+        if (other.gameObject.CompareTag("Bar"))
         {
             Debug.Log("entrer dans le Bar !!!");
             dansLeBar = true;
             timer.Reset();
             timer.Demarrer();
+            timer.GetTime();
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("bar"))
+        if (other.gameObject.CompareTag("Bar"))
         {
             dansLeBar = false;
             timer.Stop();

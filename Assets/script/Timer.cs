@@ -11,18 +11,21 @@ public class Timer
     private int annee = 0;
 
     private bool enMarche = false;
+    
     public int Minute => minute;
+    public int Seconde => seconde;
+
     public void Demarrer()
     {
         enMarche = true;
     }
 
-    void Update()
+    public void MettreAJour(float deltaTime)
     {
         if (!enMarche)
             return;
 
-        secondeAccumulee += Time.deltaTime;
+        secondeAccumulee += deltaTime;
 
         while (secondeAccumulee >= 1f)
         {
@@ -39,13 +42,13 @@ public class Timer
 
     public void Reset()
     {
-        float secondeAccumulee = 0f;
-        int seconde = 0;
-        int minute = 0;
-        int heure = 0;
-        int jour = 0;
-        int mois = 0;
-        int annee = 0;
+        secondeAccumulee = 0f;
+        seconde = 0;
+        minute = 0;
+        heure = 0;
+        jour = 0;
+        mois = 0;
+        annee = 0;
     }
 
     public void Stop()
@@ -56,9 +59,7 @@ public class Timer
     public int[] GetTime()
     {
         int[] timer = { seconde, minute, heure, jour, mois, annee };
-
         Debug.Log($"{annee}a {mois}m {jour}j {heure}h {minute}min {seconde}s");
-
         return timer;
     }
 }
