@@ -12,7 +12,6 @@ public class Timer
 
     private bool enMarche = false;
     public int Minute => minute;
-    
     public void Demarrer()
     {
         enMarche = true;
