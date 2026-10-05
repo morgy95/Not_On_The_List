@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Clients : MonoBehaviour
 {
+    [SerializeField] private GameObject objetHover;
+
     public int    life = 5;
     public string comportement;
 
@@ -17,15 +20,17 @@ public class Clients : MonoBehaviour
 
     protected virtual void Start()
     {
+
+        SpriteRenderer srHover = objetHover.GetComponent<SpriteRenderer>();
+        if (srHover != null)
+            srHover.sortingOrder = -1;
         if (chargeur == null)
             chargeur = FindFirstObjectByType<Chargeur>();
-
         if (chargeur == null)
         {
             Debug.LogError("Aucun Chargeur dans la scène !");
             return;
         }
-
         prenom = chargeur.PrenomAleatoire();
         nom = chargeur.NomAleatoire();
         age = chargeur.AgeAleatoire();
@@ -41,5 +46,18 @@ public class Clients : MonoBehaviour
         life--;
     }
 
-    
+    void OnMouseEnter()
+    {
+        objetHover.SetActive(true);
+    }   
+
+    void OnMouseExit()
+    {
+        objetHover.SetActive(false);
+    }
+
+    void OnMouseDown()
+    {
+        Debug.Log("prenom = " + prenom + " nom = " + nom + " age = " + age + " metier = " + metier + " adresses = " + adresse + " description = " + description);
+    }
 }

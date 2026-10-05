@@ -28,13 +28,11 @@ public class Clients_alcoholic : Clients
     void Awake()
     {
         comportement = "alcoholic";
-        rb = GetComponent<Rigidbody2D>();
     }
 
     void Start()
     {
         base.Start();
-        centre = rb.position;
         timer = new Timer();
     }
 

@@ -148,7 +148,7 @@ Rigidbody2D:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42089340}
   m_BodyType: 0
-  m_Simulated: 1
+  m_Simulated: 0
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
@@ -289,8 +289,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2483619ffe80449a99105e4efcaec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Clients_alcoholic
+  objetHover: {fileID: 0}
   life: 5
   comportement: 
+  prenom: 
+  nom: 
+  age: 0
+  metier: 
+  adresse: 
+  description: 
+  nomClient: 
+  chargeur: {fileID: 0}
   cible: {fileID: 0}
   vitesseNormale: 1.5
   rayonNormal: 4
@@ -452,6 +461,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
   smoothness: 5
   offset: {x: 0, y: 0}
+--- !u!1 &549366860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 549366861}
+  - component: {fileID: 549366862}
+  m_Layer: 0
+  m_Name: Chargeur
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &549366861
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549366860}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.93926, y: -0.93631, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &549366862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549366860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 559e34bb445f63a418a1300d8c357409, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chargeur
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,3 +932,4 @@ SceneRoots:
   - {fileID: 1089902649}
   - {fileID: 42089343}
   - {fileID: 1337056854}
+  - {fileID: 549366861}
