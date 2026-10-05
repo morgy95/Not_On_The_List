@@ -1,0 +1,75 @@
+{
+    "prenoms": [
+        "Jean", "Marie", "Pierre", "Sophie", "Luc", "Camille", "Thomas", "Julie", "Nicolas", "Emma",
+        "Antoine", "Léa", "Julien", "Chloé", "Maxime", "Manon", "Alexandre", "Laura", "Hugo", "Sarah",
+        "Lucas", "Inès", "Mathieu", "Clara", "Paul", "Anaïs", "Romain", "Océane", "Florian", "Pauline",
+        "Kévin", "Marine", "Guillaume", "Charlotte", "Benoît", "Élodie", "Vincent", "Aurélie", "Sébastien", "Margaux",
+        "Adrien", "Justine", "Olivier", "Mélanie", "Éric", "Céline", "David", "Émilie", "Louis", "Alice",
+        "Arthur", "Lucie", "Théo", "Jade", "Nathan", "Louise", "Gabriel", "Zoé", "Raphaël", "Eva",
+        "Samuel", "Nina", "Baptiste", "Lola", "Quentin", "Mathilde", "Dylan", "Amélie", "Yann", "Valérie",
+        "Stéphane", "Sandrine", "Mehdi", "Fatima", "Karim", "Nadia", "Omar", "Amina", "Youssef", "Leïla",
+        "Bruno", "Isabelle", "Marc", "Nathalie", "Patrick", "Catherine", "Franck", "Sylvie", "Didier", "Martine",
+        "Gérard", "Monique", "Michel", "Françoise", "Alain", "Christine", "Philippe", "Véronique", "Jacques", "Brigitte"
+    ],
+    "noms": [
+        "Martin", "Bernard", "Dubois", "Thomas", "Robert", "Richard", "Petit", "Durand", "Leroy", "Moreau",
+        "Simon", "Laurent", "Lefebvre", "Michel", "Garcia", "David", "Bertrand", "Roux", "Vincent", "Fournier",
+        "Morel", "Girard", "André", "Lefèvre", "Mercier", "Dupont", "Lambert", "Bonnet", "François", "Martinez",
+        "Legrand", "Garnier", "Faure", "Rousseau", "Blanc", "Guerin", "Muller", "Henry", "Roussel", "Nicolas",
+        "Perrin", "Morin", "Mathieu", "Clément", "Gauthier", "Dumont", "Lopez", "Fontaine", "Chevalier", "Robin",
+        "Masson", "Sanchez", "Gérard", "Nguyen", "Boyer", "Denis", "Lemaire", "Duval", "Joly", "Gautier",
+        "Roger", "Roche", "Roy", "Noel", "Meyer", "Lucas", "Meunier", "Jean", "Perez", "Marchand",
+        "Dufour", "Blanchard", "Marie", "Barbier", "Brun", "Dumas", "Brunet", "Schmitt", "Leroux", "Colin",
+        "Fernandez", "Pierre", "Renard", "Arnaud", "Rolland", "Caron", "Aubert", "Giraud", "Leclerc", "Vidal",
+        "Bourgeois", "Renaud", "Lemoine", "Picard", "Gaillard", "Philippe", "Leclercq", "Lacroix", "Fabre", "Dupuis"
+    ],
+    "metiers": [
+        "Boulanger", "Plombier", "Électricien", "Infirmier", "Professeur", "Mécanicien", "Cuisinier", "Maçon",
+        "Facteur", "Chauffeur de bus", "Comptable", "Avocat", "Médecin", "Pharmacien", "Coiffeur", "Peintre",
+        "Charpentier", "Agriculteur", "Pêcheur", "Boucher", "Libraire", "Policier", "Pompier", "Ingénieur",
+        "Développeur", "Serveur", "Vendeur", "Journaliste", "Photographe", "Retraité", "Étudiant", "Chômeur"
+    ],
+    "adresses": [
+        "12 rue de la Paix", "5 avenue Victor Hugo", "27 boulevard Voltaire", "3 impasse des Lilas",
+        "48 rue Pasteur", "9 place de la Mairie", "15 rue des Écoles", "31 avenue de la République",
+        "7 rue du Moulin", "22 chemin des Vignes", "64 rue Jean Jaurès", "18 rue de la Gare",
+        "2 allée des Tilleuls", "40 rue Gambetta", "11 quai des Pêcheurs", "56 avenue Foch",
+        "8 rue des Roses", "33 rue Saint-Michel", "25 boulevard Pasteur", "14 rue de l'Église",
+        "6 place du Marché", "52 rue Nationale", "19 rue du Commerce", "37 avenue des Champs",
+        "4 rue des Fleurs", "21 rue de Verdun", "10 chemin du Lac", "29 rue Carnot",
+        "16 rue Molière", "43 avenue de Paris"
+    ],
+    "comportements": [
+        "alcoholic", "calme", "bavard", "timide", "agressif", "radin", "festif", "curieux"
+    ],
+    "descriptions": [
+        "Vient tous les soirs après le travail et commande toujours la même chose.",
+        "Parle fort et raconte les mêmes histoires à qui veut l'entendre.",
+        "S'assoit toujours dans le coin du bar et observe les autres en silence.",
+        "Vient de déménager dans le quartier et cherche à se faire des amis.",
+        "Habitué de la maison, connaît tout le monde par son prénom.",
+        "Fatigué par une longue journée, veut juste un peu de calme.",
+        "Fête quelque chose, mais refuse de dire quoi.",
+        "Se plaint de tout : le service, la musique, le prix des boissons.",
+        "Compte chaque centime avant de passer commande.",
+        "Rit à toutes les blagues, même celles qu'il ne comprend pas.",
+        "A l'air nerveux et surveille la porte toutes les deux minutes.",
+        "Ancien du quartier, nostalgique d'une époque révolue.",
+        "Passe en coup de vent et repart aussi vite qu'il est arrivé.",
+        "Cherche quelqu'un à qui parler après une mauvaise journée.",
+        "Se vante constamment de ses exploits, réels ou inventés.",
+        "Discute politique avec n'importe qui, surtout avec ceux qui ne sont pas d'accord.",
+        "Reste discret et laisse toujours un généreux pourboire.",
+        "Commence souvent des discussions et les termine rarement.",
+        "Joue de la musique sur la table avec ses doigts, sans s'en rendre compte.",
+        "A la réputation de ne jamais payer sa première tournée.",
+        "Vient accompagné de ses collègues pour fêter la fin de semaine.",
+        "Joue aux cartes avec n'importe qui, et perd rarement.",
+        "Semble perdu dans ses pensées, le regard fixé sur son verre.",
+        "Se croit très drôle et teste ses meilleures blagues sur le barman.",
+        "Ne boit presque rien, mais reste des heures.",
+        "Arrive toujours en retard, avec une excuse différente à chaque fois."
+    ],
+    "ageMin": 16,
+    "ageMax": 80
+}

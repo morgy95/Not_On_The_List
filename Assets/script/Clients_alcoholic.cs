@@ -33,9 +33,9 @@ public class Clients_alcoholic : Clients
 
     void Start()
     {
+        base.Start();
         centre = rb.position;
         timer = new Timer();
-        ChoisirDestination(rayonNormal);
     }
 
     void Update()
@@ -44,11 +44,6 @@ public class Clients_alcoholic : Clients
             timer.MettreAJour(Time.deltaTime);
         if (dansLeBar && status == "normal" && timer.Minute >= 4)
             status = "pissed";
-    }
-
-    void FixedUpdate()
-    {
-        Action();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -70,53 +65,5 @@ public class Clients_alcoholic : Clients
             dansLeBar = false;
             timer.Stop();
         }
-    }
-
-    void Action()
-    {
-        if (status == "pissed")
-            pissedMove();
-        else if (status == "normal")
-            normalMove();
-    }
-
-    void normalMove()
-    {
-        Deplacer(vitesseNormale, rayonNormal, attenteNormaleMin, attenteNormaleMax);
-    }
-
-    void pissedMove()
-    {
-        if (cible != null)
-        {
-            Vector2 pos = Vector2.MoveTowards(rb.position, cible.position, vitesseEnervee * Time.fixedDeltaTime);
-            rb.MovePosition(pos);
-            return;
-        }
-
-        Deplacer(vitesseEnervee, rayonEnervee, 0f, attenteEnerveeMax);
-    }
-
-    void Deplacer(float vitesse, float rayon, float attenteMin, float attenteMax)
-    {
-        if (attente > 0f)
-        {
-            attente -= Time.fixedDeltaTime;
-            return;
-        }
-
-        Vector2 pos = Vector2.MoveTowards(rb.position, destination, vitesse * Time.fixedDeltaTime);
-        rb.MovePosition(pos);
-
-        if (Vector2.Distance(rb.position, destination) < 0.1f)
-        {
-            attente = Random.Range(attenteMin, attenteMax);
-            ChoisirDestination(rayon);
-        }
-    }
-
-    void ChoisirDestination(float rayon)
-    {
-        destination = centre + Random.insideUnitCircle * rayon;
     }
 }
