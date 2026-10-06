@@ -38,6 +38,7 @@ public class Clients_alcoholic : Clients
 
     void Update()
     {
+        Queu();
         if (dansLeBar)
             timer.MettreAJour(Time.deltaTime);
         if (dansLeBar && status == "normal" && timer.Minute >= 4)

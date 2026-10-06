@@ -23,6 +23,9 @@
         "Fernandez", "Pierre", "Renard", "Arnaud", "Rolland", "Caron", "Aubert", "Giraud", "Leclerc", "Vidal",
         "Bourgeois", "Renaud", "Lemoine", "Picard", "Gaillard", "Philippe", "Leclercq", "Lacroix", "Fabre", "Dupuis"
     ],
+    "sexes": [
+        "Male", "Female"
+    ],
     "metiers": [
         "Boulanger", "Plombier", "Électricien", "Infirmier", "Professeur", "Mécanicien", "Cuisinier", "Maçon",
         "Facteur", "Chauffeur de bus", "Comptable", "Avocat", "Médecin", "Pharmacien", "Coiffeur", "Peintre",
