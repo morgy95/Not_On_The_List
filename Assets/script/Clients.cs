@@ -4,6 +4,7 @@ public class Clients : MonoBehaviour
 {
     [SerializeField] private GameObject objetHover;
     [SerializeField] private Chargeur chargeur;
+    [SerializeField] private CarteIdentite carteIdentite;
 
     [Header("Infos client")]
     public string comportement;
@@ -57,6 +58,10 @@ public class Clients : MonoBehaviour
         Debug.Log("prenom = " + prenom + " nom = " + nom);
 
         Queu();
+        carteIdentite = FindFirstObjectByType<CarteIdentite>();
+
+        if (carteIdentite == null)
+            Debug.LogError("Aucune CarteIdentite trouvée dans la scène !", this);
     }
 
     void OnMouseEnter()
@@ -73,9 +78,13 @@ public class Clients : MonoBehaviour
 
     void OnMouseDown()
     {
+        string[] str = { prenom, nom, age.ToString(), metier, adresse, description };
+
         Debug.Log("prenom = " + prenom + " nom = " + nom + " age = " + age +
                   " metier = " + metier + " adresse = " + adresse +
                   " description = " + description);
+
+        carteIdentite.MiseAJour(str);
     }
 
     public void Queu()
