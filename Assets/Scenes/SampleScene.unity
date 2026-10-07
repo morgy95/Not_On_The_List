@@ -387,6 +387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 216986196}
+  - component: {fileID: 216986197}
   m_Layer: 5
   m_Name: liste
   m_TagString: Untagged
@@ -414,6 +415,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &216986197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216986195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef461061689145644ade0d29418f9a2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::List
+  listePanel: {fileID: 1017200826}
+  panelContent: {fileID: 1017200826}
+  textList: {fileID: 3374773823077549321, guid: 6d051e4c1b8e9e947ae2b17e8c8ebd3c, type: 3}
+  chargeur: {fileID: 0}
+  rectTransform: {fileID: 216986196}
+  positionOuverte: {x: 0, y: 0}
+  positionFermee: {x: 0, y: -800}
 --- !u!1 &260616320
 GameObject:
   m_ObjectHideFlags: 0
@@ -3753,7 +3773,7 @@ Transform:
   m_GameObject: {fileID: 714560030}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15014, y: -6.2, z: 0}
+  m_LocalPosition: {x: -0.15014, y: -7.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4017,7 +4037,6 @@ GameObject:
   - component: {fileID: 1017200827}
   - component: {fileID: 1017200829}
   - component: {fileID: 1017200828}
-  - component: {fileID: 1017200830}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -4083,20 +4102,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1017200826}
   m_CullTransparentMesh: 1
---- !u!114 &1017200830
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1017200826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef461061689145644ade0d29418f9a2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::List
-  textList: {fileID: 3374773823077549321, guid: 6d051e4c1b8e9e947ae2b17e8c8ebd3c, type: 3}
-  chargeur: {fileID: 0}
 --- !u!1 &1018263283
 GameObject:
   m_ObjectHideFlags: 0
@@ -4122,7 +4127,7 @@ Transform:
   m_GameObject: {fileID: 1018263283}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15014, y: -2.52, z: 0}
+  m_LocalPosition: {x: -0.15014, y: -5.46, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5157,7 +5162,7 @@ Transform:
   m_GameObject: {fileID: 1365783570}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.68, y: -6.2, z: 0}
+  m_LocalPosition: {x: 9.68, y: -6.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5453,7 +5458,7 @@ MonoBehaviour:
   prenom: {fileID: 1124895308}
   age: {fileID: 373610506}
   metier: {fileID: 1348731247}
-  list: {fileID: 0}
+  list: {fileID: 216986197}
   buttonList: {fileID: 1082268603}
   testNameList: {fileID: 0}
 --- !u!1 &1693282627

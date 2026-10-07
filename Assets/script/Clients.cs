@@ -28,6 +28,7 @@ public class Clients : MonoBehaviour
     private bool choixFait = false;
     private bool aAtteintDebutQueue = false;
     private Transform cible;
+    private Timer timer;
 
     protected virtual void Start()
     {
@@ -57,8 +58,13 @@ public class Clients : MonoBehaviour
         nomClient = prenom + " " + nom;
         Debug.Log("prenom = " + prenom + " nom = " + nom);
 
+        timer = new Timer();
+        if (waitZone == null)       waitZone       = GameObject.Find("WaitZone");
+        if (beforWaitZone == null)  beforWaitZone  = GameObject.Find("BeforeWaitZone");
+        if (endZone == null)        endZone        = GameObject.Find("endZone");
         Queu();
-        carteIdentite = FindFirstObjectByType<CarteIdentite>();
+        if (carteIdentite == null)
+            carteIdentite = FindFirstObjectByType<CarteIdentite>();
 
         if (carteIdentite == null)
             Debug.LogError("Aucune CarteIdentite trouvée dans la scène !", this);
@@ -128,12 +134,16 @@ public class Clients : MonoBehaviour
             else
             {
                 cible = endZone.transform;
-                Debug.Log("A rejoint les cieux");
             }
         }
         else
         {
             cible = null;
+        }
+        if (Vector2.Distance(endZone.transform.position, transform.position) <= 0.1f)
+        {
+            Despawn();
+            Debug.Log("A rejoint les cieux");
         }
     }
 
@@ -141,5 +151,11 @@ public class Clients : MonoBehaviour
     {
         cible = waitZone.transform;
         Debug.Log("A rejoint la queue");
+    }
+
+    public void Despawn()
+    {
+        Debug.Log("Fin de VIe");
+        Destroy(gameObject);
     }
 }
