@@ -1,7 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Clients : MonoBehaviour
 {
+    private const float espacementFile = 0.6f;
+    private static readonly List<Clients> clientsEnFile = new List<Clients>();
+
     [SerializeField] private GameObject objetHover;
     [SerializeField] private Chargeur chargeur;
     [SerializeField] private CarteIdentite carteIdentite;
@@ -27,8 +31,18 @@ public class Clients : MonoBehaviour
 
     private bool choixFait = false;
     private bool aAtteintDebutQueue = false;
-    private Transform cible;
+    private bool enFile = false;
+    private int positionDansFile = -1;
+    private Vector3? ciblePosition;
+    private TypeCible typeCible = TypeCible.AvantFile;
     private Timer timer;
+
+    private enum TypeCible
+    {
+        AvantFile,
+        EnFile,
+        Sortie
+    }
 
     protected virtual void Start()
     {
@@ -103,22 +117,26 @@ public class Clients : MonoBehaviour
 
         choixFait = false;
         aAtteintDebutQueue = false;
-        cible = beforWaitZone.transform;
+        enFile = false;
+        positionDansFile = -1;
+        typeCible = TypeCible.AvantFile;
+        ciblePosition = beforWaitZone.transform.position;
     }
 
     void Update()
     {
-        if (cible == null) return;
+        if (ciblePosition.HasValue)
+        {
+            transform.position = Vector2.MoveTowards(
+                transform.position,
+                ciblePosition.Value,
+                vitesse * Time.deltaTime);
 
-        transform.position = Vector2.MoveTowards(
-            transform.position,
-            cible.position,
-            vitesse * Time.deltaTime);
+            if (Vector2.Distance(transform.position, ciblePosition.Value) > distanceArrivee)
+                return;
+        }
 
-        if (Vector2.Distance(transform.position, cible.position) > distanceArrivee)
-            return;
-
-        if (cible == beforWaitZone.transform && !choixFait)
+        if (typeCible == TypeCible.AvantFile && !choixFait)
         {
             aAtteintDebutQueue = true;
             Debug.Log("A atteint le début de la queue");
@@ -133,28 +151,89 @@ public class Clients : MonoBehaviour
             }
             else
             {
-                cible = endZone.transform;
+                typeCible = TypeCible.Sortie;
+                ciblePosition = endZone.transform.position;
             }
         }
-        else
+        else if (typeCible == TypeCible.EnFile)
         {
-            cible = null;
+            ciblePosition = null;
+            return;
         }
-        if (Vector2.Distance(endZone.transform.position, transform.position) <= 0.1f)
+        else if (typeCible == TypeCible.Sortie)
         {
-            Despawn();
-            Debug.Log("A rejoint les cieux");
+            ciblePosition = null;
+            if (Vector2.Distance(endZone.transform.position, transform.position) <= 0.1f)
+            {
+                Despawn();
+                Debug.Log("A rejoint les cieux");
+            }
         }
     }
 
     private void JoinQueu()
     {
-        cible = waitZone.transform;
+        if (enFile)
+            return;
+
+        enFile = true;
+        typeCible = TypeCible.EnFile;
+        clientsEnFile.Add(this);
+        positionDansFile = clientsEnFile.Count - 1;
+        ciblePosition = GetQueuePosition(positionDansFile);
+        RefreshQueuePositions();
         Debug.Log("A rejoint la queue");
     }
 
+    private Vector3 GetQueuePosition(int index)
+    {
+        if (waitZone == null)
+            return transform.position;
+
+        Vector3 direction = waitZone.transform.right;
+        return waitZone.transform.position + direction * (index * espacementFile);
+    }
+
+    private static void RefreshQueuePositions()
+    {
+        for (int i = 0; i < clientsEnFile.Count; i++)
+        {
+            Clients client = clientsEnFile[i];
+            client.positionDansFile = i;
+
+            if (client.enFile && client.typeCible == TypeCible.EnFile)
+            {
+                client.ciblePosition = client.GetQueuePosition(i);
+            }
+        }
+    }
+
+    public void QuitterFile()
+    {
+        if (!enFile) return;
+
+        clientsEnFile.Remove(this);
+        enFile = false;
+        positionDansFile = -1;
+        typeCible = TypeCible.Sortie;
+        ciblePosition = endZone.transform.position;
+
+        RefreshQueuePositions();
+    }
+
+    public static void ServirPremier()
+    {
+        if (clientsEnFile.Count > 0)
+            clientsEnFile[0].QuitterFile();
+    }
     public void Despawn()
     {
+        if (enFile)
+        {
+            clientsEnFile.Remove(this);
+            RefreshQueuePositions();
+        }
+
         Debug.Log("Fin de VIe");
         Destroy(gameObject);
     }
