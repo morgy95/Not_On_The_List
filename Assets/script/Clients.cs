@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Unity.Hierarchy.Editor;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Clients : MonoBehaviour
@@ -15,6 +17,7 @@ public class Clients : MonoBehaviour
     public string prenom;
     public string nom;
     public int age;
+    public string sexe;
     public string metier;
     public string adresse;
     public string description;
@@ -36,6 +39,21 @@ public class Clients : MonoBehaviour
     private Vector3? ciblePosition;
     private TypeCible typeCible = TypeCible.AvantFile;
     private Timer timer;
+
+    [Header("Hover")]
+    [SerializeField] private SpriteRenderer hoverRenderer;
+    [SerializeField] private Color couleurHover = new Color(1f, 0.9f, 0.3f, 0.9f);
+    [SerializeField] private float echelleHover = 1.12f;
+    private bool survole = false;
+
+    [Header("Animation")]
+    [SerializeField] private float frameDuration = 0.15f;
+    private float animationTimer = 0f;
+    private int currentFrame = 0;
+    private Vector3 dernierePosition;
+    private Vector2 derniereDirection = Vector2.down;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    private Sprite[] sprites;
 
     private enum TypeCible
     {
@@ -63,13 +81,30 @@ public class Clients : MonoBehaviour
             return;
         }
 
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (hoverRenderer != null)
+        {
+            hoverRenderer.sortingLayerID = spriteRenderer.sortingLayerID;
+            hoverRenderer.sortingOrder = spriteRenderer.sortingOrder - 1;
+            hoverRenderer.color = couleurHover;
+            hoverRenderer.transform.localScale = Vector3.one * echelleHover;
+            hoverRenderer.enabled = false;
+        }
+
         prenom = chargeur.PrenomAleatoire();
         nom = chargeur.NomAleatoire();
         age = chargeur.AgeAleatoire();
+        sexe = chargeur.SexeAleatoire();
         metier = chargeur.MetierAleatoire();
         adresse = chargeur.AdressesAleatoire();
         description = chargeur.DescriptionsAleatoire();
         nomClient = prenom + " " + nom;
+        sprites = chargeur.SpritesAleatoire(sexe);
         Debug.Log("prenom = " + prenom + " nom = " + nom);
 
         timer = new Timer();
@@ -86,14 +121,16 @@ public class Clients : MonoBehaviour
 
     void OnMouseEnter()
     {
-        if (objetHover != null)
-            objetHover.SetActive(true);
+        survole = true;
+        if (hoverRenderer != null)
+            hoverRenderer.enabled = true;
     }
 
     void OnMouseExit()
     {
-        if (objetHover != null)
-            objetHover.SetActive(false);
+        survole = false;
+        if (hoverRenderer != null)
+            hoverRenderer.enabled = false;
     }
 
     void OnMouseDown()
@@ -125,6 +162,10 @@ public class Clients : MonoBehaviour
 
     void Update()
     {
+        Vector2 delta = transform.position - dernierePosition;
+        dernierePosition = transform.position;
+
+        MettreAJourSprite(delta);
         if (ciblePosition.HasValue)
         {
             transform.position = Vector2.MoveTowards(
@@ -236,5 +277,51 @@ public class Clients : MonoBehaviour
 
         Debug.Log("Fin de VIe");
         Destroy(gameObject);
+    }
+
+    private void MettreAJourSprite(Vector2 delta)
+    {
+        if (sprites == null || sprites.Length == 0 || spriteRenderer == null) return;
+
+        bool enMouvement = delta.sqrMagnitude > 0.00001f;
+
+        if (enMouvement)
+        {
+            derniereDirection = delta.normalized;
+
+            animationTimer += Time.deltaTime;
+            if (animationTimer >= frameDuration)
+            {
+                animationTimer = 0f;
+                currentFrame = (currentFrame + 1) % 4;
+            }
+        }
+        else
+        {
+            currentFrame = 0;
+            animationTimer = 0f;
+        }
+
+        AppliquerSprite(derniereDirection, currentFrame);
+        if (survole && hoverRenderer != null)
+        {
+            hoverRenderer.sprite = spriteRenderer.sprite;
+            hoverRenderer.flipX = spriteRenderer.flipX;
+            hoverRenderer.flipY = spriteRenderer.flipY;
+        }
+    }
+
+    private void AppliquerSprite(Vector2 direction, int frame)
+    {
+        int debut;
+
+        if (Mathf.Abs(direction.y) >= Mathf.Abs(direction.x))
+            debut = direction.y > 0 ? 16 : 1;
+        else
+            debut = direction.x > 0 ? 11 : 6;
+
+        int index = debut + frame;
+        if (index < sprites.Length)
+            spriteRenderer.sprite = sprites[index];
     }
 }

@@ -11,17 +11,33 @@ public class CarteIdentite : MonoBehaviour
     [SerializeField] private TMP_Text metier;
     [SerializeField] private Liste list;
 
+    [Header("Button GUI")]
+    [SerializeField] private Image imageTargetAccept;
+    [SerializeField] private Image imageTargetRefuse;
+    [SerializeField] private Sprite[] buttonSprite;
+    [SerializeField] private Button buttonRefuse;
+    [SerializeField] private Button buttonAccepter;
+
     public Button buttonList;
     public GameObject testNameList;
 
-    void Start()
+    private void Start()
     {
         if (buttonList != null)
         {
             buttonList.onClick.AddListener(OnButtonClicked);
         }
 
-        // Reinitialisation des champs texte
+        if (buttonAccepter != null)
+        {
+            buttonAccepter.onClick.AddListener(AccepteEvent);
+        }
+
+        if (buttonRefuse != null)
+        {
+            buttonRefuse.onClick.AddListener(RefuseEvent);
+        }
+
         if (nom != null) nom.text = "";
         if (prenom != null) prenom.text = "";
         if (age != null) age.text = "";
@@ -30,21 +46,23 @@ public class CarteIdentite : MonoBehaviour
 
     public void MiseAJour(string[] str)
     {
-        if (prenom == null) Debug.LogError("prenom non assigne dans l'Inspector", this);
-        if (nom == null) Debug.LogError("nom non assigne dans l'Inspector", this);
-        if (age == null) Debug.LogError("age non assigne dans l'Inspector", this);
-        if (metier == null) Debug.LogError("metier non assigne dans l'Inspector", this);
-
         if (str == null || str.Length < 4)
         {
-            Debug.LogWarning("MiseAJour : tableau invalide ou incomplet (minimum 4 elements attendus)");
+            Debug.LogWarning("MiseAJour : tableau invalide ou incomplet (minimum 4 éléments attendus)", this);
             return;
         }
 
-        prenom.text = "Prenom : " + str[0];
-        nom.text = "Nom : " + str[1];
-        age.text = "Age : " + str[2];
-        metier.text = "Metier : " + str[3];
+        if (prenom != null) prenom.text = "Prénom : " + str[0];
+        else Debug.LogError("prenom non assigné dans l'Inspector", this);
+
+        if (nom != null) nom.text = "Nom : " + str[1];
+        else Debug.LogError("nom non assigné dans l'Inspector", this);
+
+        if (age != null) age.text = "Âge : " + str[2];
+        else Debug.LogError("age non assigné dans l'Inspector", this);
+
+        if (metier != null) metier.text = "Métier : " + str[3];
+        else Debug.LogError("metier non assigné dans l'Inspector", this);
     }
 
     public void OnButtonClicked()
@@ -55,7 +73,29 @@ public class CarteIdentite : MonoBehaviour
         }
         else
         {
-            Debug.LogError("La variable 'list' n'est pas assignee dans CarteIdentite !", this);
+            Debug.LogError("La variable 'list' n'est pas assignée dans CarteIdentite !", this);
+        }
+    }
+
+    public void AccepteEvent() 
+    { 
+        if (imageTargetAccept == null) return;
+
+        if (buttonSprite != null && buttonSprite.Length > 1 && buttonSprite[1] != null)
+        {
+            imageTargetAccept.sprite = buttonSprite[1];
+            Debug.Log("Client accepted");
+        }
+    }
+
+    public void RefuseEvent()
+    {
+        if (imageTargetRefuse == null) return;
+
+        if (buttonSprite != null && buttonSprite.Length > 3 && buttonSprite[3] != null)
+        {
+            imageTargetRefuse.sprite = buttonSprite[3];
+            Debug.Log("Client refused");
         }
     }
 
@@ -64,6 +104,16 @@ public class CarteIdentite : MonoBehaviour
         if (buttonList != null)
         {
             buttonList.onClick.RemoveListener(OnButtonClicked);
+        }
+
+        if (buttonAccepter != null)
+        {
+            buttonAccepter.onClick.RemoveListener(AccepteEvent);
+        }
+
+        if (buttonRefuse != null)
+        {
+            buttonRefuse.onClick.RemoveListener(RefuseEvent);
         }
     }
 }
