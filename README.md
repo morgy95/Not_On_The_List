@@ -1,44 +1,44 @@
 Not On The List
 
-A top-down bouncer game made in Unity for the "Uninvited" game jam.
+Un jeu de videur en vue de dessus, fait avec Unity pour la game jam « Uninvited ».
 
-You run the door of a nightclub. Check every guest against the guest list, let in the ones who belong, turn away the ones who don't, and keep the club's money and reputation afloat. Let in the wrong people and the boss will fire you.
+Tu gères l'entrée d'une boîte de nuit. Vérifie chaque client sur la liste des invités, laisse entrer ceux qui y sont, refoule les autres, et garde l'argent et la réputation du club à flot. Laisse entrer les mauvaises personnes et le patron te vire.
 
-<!-- Add a screenshot or GIF here: ![Gameplay](docs/gameplay.gif) -->
+<!-- Ajoute une capture d'écran ou un GIF ici : ![Gameplay](docs/gameplay.gif) -->
 Gameplay
-Click a guest in the queue to read their ID card (first name, last name, age, job).
-Open the guest list and compare. If the name is on it, Accept. If not, Refuse.
-Accepting a guest who is on the list earns money and reputation. Accepting someone who isn't costs you both.
-Rent and expenses are taken every month, and they grow over time.
-If your money drops too low, you're fired: the game over screen shows your total money won and what you have left.
+Clique sur un client dans la file pour lire sa carte d'identité (prénom, nom, âge, métier).
+Ouvre la liste des invités et compare. Si le nom y est, Accepter. Sinon, Refuser.
+Accepter un client qui est sur la liste rapporte de l'argent et de la réputation. Accepter quelqu'un qui n'y est pas t'en fait perdre.
+Le loyer et les dépenses sont prélevés chaque mois, et ils augmentent avec le temps.
+Si ton argent tombe trop bas, tu es viré : l'écran de défaite affiche l'argent gagné au total et l'argent qu'il te reste.
 
-The full concept also includes kicking out drunk guests inside the club and closing windows before intruders climb in.
+Le concept complet prévoit aussi de virer les clients ivres à l'intérieur du club et de fermer les fenêtres avant que des intrus n'entrent.
 
-Features
-Guest list and ID card system
-Money, monthly expenses and a reputation star system
-In-game clock (hour, day, month, year)
-Main menu with how to play, volume setting and best score
-Game over screen with money won and money left
-Looping music that survives scene changes
-Built with
+Fonctionnalités
+Système de liste d'invités et de carte d'identité
+Argent, dépenses mensuelles et système de réputation par étoiles
+Horloge en jeu (heure, jour, mois, année)
+Menu principal avec règles du jeu, réglage du volume et meilleur score
+Écran de défaite avec l'argent gagné et l'argent restant
+Musique en boucle qui continue d'une scène à l'autre
+Technologies
 Unity 6
-C# and TextMeshPro
-Music composed in FL Studio
-Pixel art sprites
-Run it
-Clone the repository.
-Open the project with Unity Hub (use the Unity version listed in ProjectSettings/ProjectVersion.txt).
-Open the Menu scene and press Play.
+C# et TextMeshPro
+Musique composée avec FL Studio
+Sprites en pixel art
+Lancer le projet
+Clone le dépôt.
+Ouvre le projet avec Unity Hub (utilise la version d'Unity indiquée dans ProjectSettings/ProjectVersion.txt).
+Ouvre la scène Menu et appuie sur Play.
 
-A web build is available on itch.io: (add the link here)
+Une version web est disponible sur itch.io : (ajoute le lien ici)
 
-Project structure
-Assets/       scenes, scripts, sprites, audio
-Packages/     Unity package manifest
+Structure du projet
+Assets/           scènes, scripts, sprites, audio
+Packages/         manifeste des packages Unity
 ProjectSettings/
-Author
+Auteur
 
 Morgan Marcelin (@morgy95)
 
-Made for the "Uninvited" game jam, 2026.
+Réalisé pour la game jam « Uninvited », 2026.
