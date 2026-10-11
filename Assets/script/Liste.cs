@@ -8,7 +8,7 @@ public class Liste : MonoBehaviour
     public GameObject panelContent;
     public GameObject textList;
     public Chargeur chargeur;
-
+    public string[] nameList;
 
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Vector2 positionOuverte;
@@ -40,7 +40,7 @@ public class Liste : MonoBehaviour
             return;
         }
 
-        string[] nameList = chargeur.CreateListe(10);
+        nameList = chargeur.CreateListe(10);
         Debug.Log(string.Join(", ", nameList));
 
         for (int i = 0; i < nameList.Length; i++)

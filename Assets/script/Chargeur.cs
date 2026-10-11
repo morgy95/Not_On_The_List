@@ -12,6 +12,7 @@ public class ListeNoms
     public string[] descriptions;
     public int ageMin;
     public int ageMax;
+    public string[] list;
 }
 
 public class Chargeur : MonoBehaviour
@@ -38,7 +39,6 @@ public class Chargeur : MonoBehaviour
 
     public string[] CreateListe(int maxNb)
     {
-        // Sécurité : évite le crash si le JSON n'a pas été chargé correctement
         if (liste == null || liste.noms == null || liste.noms.Length == 0) return new string[0];
 
         string[] str = new string[maxNb];
@@ -46,7 +46,13 @@ public class Chargeur : MonoBehaviour
         {
             str[i] = liste.noms[Random.Range(0, liste.noms.Length)];
         }
+        liste.list = str;
         return str;
+    }
+
+    public string[] getList()
+    {
+        return liste.list;
     }
 
     public string PrenomAleatoire()       => liste.prenoms[Random.Range(0, liste.prenoms.Length)];

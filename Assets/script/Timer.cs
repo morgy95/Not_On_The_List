@@ -11,7 +11,8 @@ public class Timer
     private int annee = 0;
 
     private bool enMarche = false;
-    
+
+    public int Mois => mois;
     public int Minute => minute;
     public int Seconde => seconde;
 
@@ -32,14 +33,32 @@ public class Timer
             secondeAccumulee -= 1f;
             seconde++;
         }
+        Augment();
+    }
+    
+    public void MettreAJourGame(float deltaTime)
+    {
+        if (!enMarche)
+            return;
 
+        secondeAccumulee += deltaTime;
+
+        while (secondeAccumulee >= 1f)
+        {
+            secondeAccumulee -= 1f;
+            minute += 5;
+        }
+        Augment();
+    }
+
+    private void Augment()
+    {
         if (seconde >= 60) { seconde = 0; minute++; }
         if (minute >= 60)  { minute = 0;  heure++;  }
         if (heure >= 24)   { heure = 0;   jour++;   }
         if (jour >= 30)    { jour = 0;    mois++;   }
         if (mois >= 12)    { mois = 0;    annee++;  }
     }
-
     public void Reset()
     {
         secondeAccumulee = 0f;

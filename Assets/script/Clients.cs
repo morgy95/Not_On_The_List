@@ -31,14 +31,17 @@ public class Clients : MonoBehaviour
     [Header("Déplacement")]
     [SerializeField] private float vitesse = 3f;
     [SerializeField] private float distanceArrivee = 0.05f;
+    [SerializeField] private float vitesseDansBoite = 1.5f;
+    [SerializeField] private float attenteDansBoiteMin = 1f;
+    [SerializeField] private float attenteDansBoiteMax = 3f;
 
-    private bool choixFait = false;
-    private bool aAtteintDebutQueue = false;
+    private bool choixFait;
     private bool enFile = false;
     private int positionDansFile = -1;
     private Vector3? ciblePosition;
     private TypeCible typeCible = TypeCible.AvantFile;
-    private Timer timer;
+    private Collider2D zoneBoite;
+    private float attenteDansBoite;
 
     [Header("Hover")]
     [SerializeField] private SpriteRenderer hoverRenderer;
@@ -59,7 +62,9 @@ public class Clients : MonoBehaviour
     {
         AvantFile,
         EnFile,
-        Sortie
+        Sortie,
+        EntreeBoite,
+        DansBoite
     }
 
     protected virtual void Start()
@@ -107,10 +112,23 @@ public class Clients : MonoBehaviour
         sprites = chargeur.SpritesAleatoire(sexe);
         Debug.Log("prenom = " + prenom + " nom = " + nom);
 
-        timer = new Timer();
         if (waitZone == null)       waitZone       = GameObject.Find("WaitZone");
         if (beforWaitZone == null)  beforWaitZone  = GameObject.Find("BeforeWaitZone");
         if (endZone == null)        endZone        = GameObject.Find("endZone");
+        GameObject bar = GameObject.FindGameObjectWithTag("Bar");
+        if (bar != null)
+        {
+            zoneBoite = bar.GetComponent<Collider2D>();
+            if (zoneBoite == null)
+                Debug.LogError("L'objet tagué 'Bar' doit avoir un Collider2D trigger.", bar);
+            else if (!zoneBoite.isTrigger)
+                Debug.LogError("Le Collider2D de l'objet 'Bar' doit être configuré en trigger.", bar);
+        }
+        else
+        {
+            Debug.LogError("Aucun objet avec le tag 'Bar' n'a été trouvé.", this);
+        }
+
         Queu();
         if (carteIdentite == null)
             carteIdentite = FindFirstObjectByType<CarteIdentite>();
@@ -141,7 +159,8 @@ public class Clients : MonoBehaviour
                   " metier = " + metier + " adresse = " + adresse +
                   " description = " + description);
 
-        carteIdentite.MiseAJour(str);
+        if (carteIdentite != null)
+            carteIdentite.SelectionnerClient(this, str);
     }
 
     public void Queu()
@@ -153,19 +172,25 @@ public class Clients : MonoBehaviour
         }
 
         choixFait = false;
-        aAtteintDebutQueue = false;
         enFile = false;
         positionDansFile = -1;
         typeCible = TypeCible.AvantFile;
         ciblePosition = beforWaitZone.transform.position;
     }
 
-    void Update()
+    protected virtual void Update()
     {
         Vector2 delta = transform.position - dernierePosition;
         dernierePosition = transform.position;
 
         MettreAJourSprite(delta);
+
+        if (typeCible == TypeCible.DansBoite)
+        {
+            MettreAJourDeplacementDansBoite();
+            return;
+        }
+
         if (ciblePosition.HasValue)
         {
             transform.position = Vector2.MoveTowards(
@@ -175,40 +200,28 @@ public class Clients : MonoBehaviour
 
             if (Vector2.Distance(transform.position, ciblePosition.Value) > distanceArrivee)
                 return;
+
+            ciblePosition = null;
         }
 
-        if (typeCible == TypeCible.AvantFile && !choixFait)
+        if (typeCible == TypeCible.AvantFile)
         {
-            aAtteintDebutQueue = true;
-            Debug.Log("A atteint le début de la queue");
-            choixFait = true;
-
-            int random = Random.Range(0, 2);
-            Debug.Log("Le nombre = " + random);
-
-            if (random == 1)
-            {
-                JoinQueu();
-            }
-            else
-            {
-                typeCible = TypeCible.Sortie;
-                ciblePosition = endZone.transform.position;
-            }
+            JoinQueu();
         }
         else if (typeCible == TypeCible.EnFile)
         {
-            ciblePosition = null;
             return;
         }
         else if (typeCible == TypeCible.Sortie)
         {
-            ciblePosition = null;
-            if (Vector2.Distance(endZone.transform.position, transform.position) <= 0.1f)
-            {
-                Despawn();
-                Debug.Log("A rejoint les cieux");
-            }
+            Despawn();
+        }
+        else if (typeCible == TypeCible.EntreeBoite && zoneBoite != null)
+        {
+            if (zoneBoite.OverlapPoint(transform.position))
+                CommencerDeplacementDansBoite();
+            else
+                ciblePosition = zoneBoite.bounds.center;
         }
     }
 
@@ -253,12 +266,60 @@ public class Clients : MonoBehaviour
     {
         if (!enFile) return;
 
+        RetirerDeFile();
+        typeCible = TypeCible.Sortie;
+        ciblePosition = endZone.transform.position;
+        choixFait = true;
+
+        RefreshQueuePositions();
+    }
+
+    public void Accepter()
+    {
+        if (choixFait)
+            return;
+
+        if (zoneBoite == null)
+        {
+            Debug.LogError("Impossible d'admettre le client : le trigger 'Bar' n'est pas configuré.", this);
+            return;
+        }
+
+        choixFait = true;
+        RetirerDeFile();
+        typeCible = TypeCible.EntreeBoite;
+
+        if (zoneBoite.OverlapPoint(transform.position))
+            CommencerDeplacementDansBoite();
+        else
+            ciblePosition = zoneBoite.bounds.center;
+    }
+
+    public void Refuser()
+    {
+        if (choixFait)
+            return;
+
+        if (endZone == null)
+        {
+            Debug.LogError("Impossible de refuser le client : la zone de sortie n'est pas configurée.", this);
+            return;
+        }
+
+        choixFait = true;
+        RetirerDeFile();
+        typeCible = TypeCible.Sortie;
+        ciblePosition = endZone.transform.position;
+    }
+
+    private void RetirerDeFile()
+    {
+        if (!enFile)
+            return;
+
         clientsEnFile.Remove(this);
         enFile = false;
         positionDansFile = -1;
-        typeCible = TypeCible.Sortie;
-        ciblePosition = endZone.transform.position;
-
         RefreshQueuePositions();
     }
 
@@ -269,14 +330,85 @@ public class Clients : MonoBehaviour
     }
     public void Despawn()
     {
-        if (enFile)
+        RetirerDeFile();
+        if (carteIdentite != null)
+            carteIdentite.DeselectionnerClient(this);
+
+        Destroy(gameObject);
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Bar"))
         {
-            clientsEnFile.Remove(this);
-            RefreshQueuePositions();
+            zoneBoite = other;
+            if (choixFait && typeCible == TypeCible.EntreeBoite)
+                CommencerDeplacementDansBoite();
+        }
+    }
+
+    protected virtual void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Bar") && typeCible == TypeCible.DansBoite)
+        {
+            typeCible = TypeCible.EntreeBoite;
+            ciblePosition = zoneBoite != null ? zoneBoite.bounds.center : transform.position;
+        }
+    }
+
+    private void CommencerDeplacementDansBoite()
+    {
+        if (!choixFait || zoneBoite == null)
+            return;
+
+        typeCible = TypeCible.DansBoite;
+        attenteDansBoite = 0f;
+        ciblePosition = ChoisirDestinationDansBoite();
+    }
+
+    private void MettreAJourDeplacementDansBoite()
+    {
+        if (attenteDansBoite > 0f)
+        {
+            attenteDansBoite -= Time.deltaTime;
+            return;
         }
 
-        Debug.Log("Fin de VIe");
-        Destroy(gameObject);
+        if (!ciblePosition.HasValue ||
+            Vector2.Distance(transform.position, ciblePosition.Value) <= distanceArrivee)
+        {
+            attenteDansBoite = Random.Range(attenteDansBoiteMin, attenteDansBoiteMax);
+            ciblePosition = ChoisirDestinationDansBoite();
+            return;
+        }
+
+        transform.position = Vector2.MoveTowards(
+            transform.position,
+            ciblePosition.Value,
+            vitesseDansBoite * Time.deltaTime);
+    }
+
+    private Vector2 ChoisirDestinationDansBoite()
+    {
+        Bounds bounds = zoneBoite.bounds;
+        for (int i = 0; i < 20; i++)
+        {
+            Vector2 point = new Vector2(
+                Random.Range(bounds.min.x, bounds.max.x),
+                Random.Range(bounds.min.y, bounds.max.y));
+
+            if (zoneBoite.OverlapPoint(point))
+                return point;
+        }
+
+        return zoneBoite.ClosestPoint(bounds.center);
+    }
+
+    protected virtual void OnDestroy()
+    {
+        RetirerDeFile();
+        if (carteIdentite != null)
+            carteIdentite.DeselectionnerClient(this);
     }
 
     private void MettreAJourSprite(Vector2 delta)
