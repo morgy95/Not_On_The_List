@@ -15,7 +15,6 @@ public class SpawnClients : MonoBehaviour
         timer = new Timer();
     }
 
-    // Update; is called once per frame
     void Update()
     {
         timer.Demarrer();

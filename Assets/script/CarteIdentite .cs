@@ -1,7 +1,4 @@
-using System;
 using TMPro;
-using Unity.Tutorials.Editor;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +9,8 @@ public class CarteIdentite : MonoBehaviour
     [SerializeField] private TMP_Text age;
     [SerializeField] private TMP_Text metier;
     [SerializeField] private Liste list;
-    [SerializeField] private TMP_Text MonneyText; 
-    [SerializeField] private TMP_Text date; 
+    [SerializeField] private TMP_Text MonneyText;
+    [SerializeField] private TMP_Text date;
 
     [Header("Button GUI")]
     [SerializeField] private Image imageTargetAccept;
@@ -29,9 +26,21 @@ public class CarteIdentite : MonoBehaviour
 
     private Chargeur chargeur;
     public double monney = 0;
+    public double monneyWin = 0;
     private int reputaion = 0;
     private int nombreMois = 0;
-    [SerializeField] private Timer timer;        
+    private bool perdu = false;
+
+    [Header("Defaite")]
+    [SerializeField] private double seuilDefaite = 0;
+    [SerializeField] private Timer timer;
+
+    [Header("Reputation")]
+    [SerializeField] private Image[] star;
+    [SerializeField] private Sprite fullStar;
+    [SerializeField] private Sprite emptyStar;   // optionnel : sprite d'une etoile vide
+    [SerializeField] private int pointsParEtoile = 10;
+
     private void Start()
     {
         if (buttonList != null)
@@ -57,15 +66,23 @@ public class CarteIdentite : MonoBehaviour
         if (age != null) age.text = "";
         if (metier != null) metier.text = "";
         MettreBoutonsActifs(false);
+        ActualiserReputation();
     }
 
     public void Update()
     {
+        if (perdu) return;
+
         timer.MettreAJourGame(Time.deltaTime);
-        if (timer.Mois % 1 == 0 && timer.Mois - 1 == nombreMois)
+        if (timer.Mois - 1 == nombreMois)
         {
             monney -= 200 * timer.Mois;
             nombreMois = timer.Mois;
+            if (monney < seuilDefaite)
+            {
+                Lose();
+                return;
+            }
         }
         UpdateTime();
         if (MonneyText != null)
@@ -76,7 +93,7 @@ public class CarteIdentite : MonoBehaviour
 
     public void UpdateTime()
     {
-        int[] tim= timer.GetTime();
+        int[] tim = timer.GetTime();
         if (date != null)
         {
             date.text = $"{tim[5]}year {tim[4]}month {tim[3]}day {tim[2]}hour";
@@ -137,7 +154,6 @@ public class CarteIdentite : MonoBehaviour
 
     public void AccepteEvent()
     {
-        int i = 0;
         bool verif = false;
         if (clientSelectionne == null)
         {
@@ -148,17 +164,20 @@ public class CarteIdentite : MonoBehaviour
         Clients client = clientSelectionne;
         clientSelectionne = null;
         MettreBoutonsActifs(false);
-        while (i < list.nameList.Length)
+
+        for (int i = 0; i < list.nameList.Length; i++)
         {
             if (client.nom == list.nameList[i])
             {
-                verif = true;;
+                verif = true;
+                break;
             }
-            i++;
         }
+
         if (verif)
         {
             monney += 30;
+            monneyWin += 30;
             reputaion += 1;
         }
         else
@@ -166,6 +185,7 @@ public class CarteIdentite : MonoBehaviour
             monney -= 50;
             reputaion -= 4;
         }
+        ActualiserReputation();
         client.Accepter();
 
         if (buttonSprite != null && buttonSprite.Length > 1 && buttonSprite[1] != null)
@@ -173,6 +193,24 @@ public class CarteIdentite : MonoBehaviour
             if (imageTargetAccept != null)
                 imageTargetAccept.sprite = buttonSprite[1];
             Debug.Log("Client accepted");
+        }
+    }
+
+    private void ActualiserReputation()
+    {
+        if (star == null || fullStar == null || pointsParEtoile <= 0)
+            return;
+
+        int nbEtoiles = Mathf.Clamp(reputaion / pointsParEtoile, 0, star.Length);
+
+        for (int i = 0; i < star.Length; i++)
+        {
+            if (star[i] == null) continue;
+
+            if (i < nbEtoiles)
+                star[i].sprite = fullStar;
+            else if (emptyStar != null)
+                star[i].sprite = emptyStar;
         }
     }
 
@@ -222,5 +260,13 @@ public class CarteIdentite : MonoBehaviour
         {
             buttonRefuse.onClick.RemoveListener(RefuseEvent);
         }
+    }
+
+    private void Lose()
+    {
+        perdu = true;
+        int gagne = Mathf.Max(0, (int)monneyWin);
+        int restant = Mathf.Max(0, (int)monney);
+        LosePage.Show(gagne, restant);
     }
 }

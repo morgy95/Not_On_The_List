@@ -9,6 +9,6 @@ public class Musique : MonoBehaviour
         AudioSource source = gameObject.AddComponent<AudioSource>();
         source.clip = clip;
         source.loop = true;
-        // source.Play();
+        source.Play();
     }
 }
